@@ -2,6 +2,7 @@ package com.example.demo.Controller;
 
 import com.example.demo.Service.IndexService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.ui.Model;
@@ -12,7 +13,7 @@ public class IndexController {
     private IndexService indexService;
     @RequestMapping(value = "")
     public String index (Model model){
-        indexService.testHTTP("https://crossbrowsertesting.com/api/v3/selenium/browsers");
+        indexService.testHTTP(" https://api.exchangeratesapi.io/latest?base=EUR");
         return "index";
     }
 }
