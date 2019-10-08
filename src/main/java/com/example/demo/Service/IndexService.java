@@ -1,9 +1,9 @@
 package com.example.demo.Service;
 
-import org.json.JSONArray;
+import com.example.demo.Model.CurrencyEnum;
+import com.example.demo.Model.CurrencyModel;
 import org.json.JSONObject;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
@@ -49,6 +49,13 @@ public class IndexService {
     public static void parseJson (String responseBody)
     {
         JSONObject jsonObject = new JSONObject(responseBody);
-        System.out.println(jsonObject);
+//        int size=jsonObject.get("rates").length;
+        System.out.println(jsonObject.get("rates"));
     }
+
+    public CurrencyEnum[] allCurrency()
+    {
+        return CurrencyEnum.values();
+    }
+
 }
