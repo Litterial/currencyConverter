@@ -6,6 +6,8 @@
 </head>
 <body>
 
+<h1 th:text="|Conversion rate: ${conversion_rate}|"></h1>
+<h1 th:text="|Conversion amount: ${conversion_amount}|"></h1>
 <div th:object="${currency_model}">
     <h1 th:text="${currency_model.money}"></h1>
     <h1 th:text="${currency_model.baseCurrency}"></h1>

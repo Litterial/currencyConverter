@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.validation.Valid;
+import java.util.HashMap;
 
 @Controller
 public class IndexController {
@@ -31,6 +32,8 @@ public class IndexController {
     public String convertCurrency(@Valid @ModelAttribute("currency_model") CurrencyModel currencyform, Errors err, Model model)
     {
 
+        String conversion_rate="";
+        String conversion_amount="";
         if (err.hasErrors())
         {
             model.addAttribute("currency_model",currencyform);
@@ -38,7 +41,17 @@ public class IndexController {
             model.addAttribute("currency",indexService.allCurrency());
             return "index";
         }
-        indexService.conversionRequest(currencyform);
+        HashMap<String,String> dataMap =indexService.conversionRequest(currencyform);
+
+        if (dataMap.get("success").equals("false")) {
+            model.addAttribute("errorMessage", dataMap.get("conversion_rate"));
+            return "index";
+        }
+        conversion_rate=dataMap.get("conversion_rate");
+        conversion_amount=dataMap.get("conversion_amount");
+
+        model.addAttribute("conversion_rate",conversion_rate);
+        model.addAttribute("conversion_amount",conversion_amount);
         return "conversion";
     }
 }

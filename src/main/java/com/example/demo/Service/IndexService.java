@@ -10,59 +10,72 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class IndexService {
-    @Cacheable("currency_api")
-    public void testHTTP (String targetURL)
-    {
 
-        //read all lines
-        String inputLine;
-        //StringBuffer is used to append lines
-        StringBuffer content= new StringBuffer();
+    public HashMap<String,String> conversionRequest(CurrencyModel currency) {
+        String base = currency.getBaseCurrency().toString();
+        String exchange = currency.getExchangeCurrency().toString();
+
+        String inputLine;   //inputLine will read each line
+        StringBuffer content = new StringBuffer();    //StringBuffer is used to append lines
+        HashMap<String,String> connectionMap;
+
         try {
-            URL url = new URL(targetURL);
-            // response from a url connection is an inputstream
-            BufferedReader reader=new BufferedReader(new InputStreamReader(url.openStream()));
+            URL url = new URL("https://api.exchangeratesapi.io/latest?base=" +base+"&symbols="+exchange);
+            BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));  // response from a url connection is an inputstream
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
-            connection.setRequestProperty("Cache-Control","max-age=3600");
             System.out.println("Printing Response Code");
             System.out.println(connection.getResponseCode());
 
-            while((inputLine = reader.readLine()) != null){
-                content.append(inputLine);
+            //As long as current line is not blank, append the line
+            while ((inputLine = reader.readLine()) != null) { content.append(inputLine);}
+
+            reader.close();//close the reader
+            connectionMap= parseJson(content.toString(),exchange);
+
+            if(connectionMap.get("success").equals("fail")) {
+                return connectionMap;
             }
-            reader.close();
-//            System.out.println(content.toString());
-            parseJson(content.toString());
-        }
+            Double d_conversion_rate=Double.parseDouble(connectionMap.get("conversion_rate"));
+            String conversionAmount=String.valueOf(currency.getMoney()*d_conversion_rate);
+            connectionMap.put("conversion_amount",conversionAmount);
+            return connectionMap;
 
-        catch (Exception e){
+        } catch (Exception e) {
             System.out.println("No connection");
+
+            connectionMap=new HashMap<>();
+            connectionMap.put("success","fail");
+            connectionMap.put("conversion_rate","Could not connect to endpoint");
+
+            return connectionMap;
         }
     }
-
-    public static void parseJson (String responseBody)
-    {
+    private static HashMap<String,String> parseJson(String responseBody, String conversion_abbr) {
         JSONObject jsonObject = new JSONObject(responseBody);
-//        int size=jsonObject.get("rates").length;
-        System.out.println(jsonObject.get("rates"));
+        HashMap<String,String> jsonMap=new HashMap<>();
+        String success="pass";
+        if(jsonObject.has("error"))
+        {
+            success="fail";
+            jsonMap.put("success",success);
+            jsonMap.put("conversion_rate",conversion_abbr + "is not a valid currency.");
+            return jsonMap;
+        }
+        JSONObject rateObject=jsonObject.getJSONObject("rates");
+        String rate=rateObject.get(conversion_abbr).toString();
+        jsonMap.put("success",success);
+        jsonMap.put("conversion_rate",rate);
+        return jsonMap;
     }
 
-    public CurrencyEnum[] allCurrency()
-    {
+    public CurrencyEnum[] allCurrency() {
         return CurrencyEnum.values();
     }
 
-    public void conversionRequest(CurrencyModel currency)
-    {
-        String base=currency.getBaseCurrency().toString();
-        String exchange=currency.getExchangeCurrency().toString();
-
-    }
 
 }
