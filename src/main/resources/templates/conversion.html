@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<div th:object="${currency_model}">
+    <h1 th:text="${currency_model.money}"></h1>
+    <h1 th:text="${currency_model.baseCurrency}"></h1>
+    <h1 th:text="${currency_model.exchangeCurrency}"></h1>
+</div>
+</body>
+</html>

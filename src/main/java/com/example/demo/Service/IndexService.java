@@ -58,4 +58,11 @@ public class IndexService {
         return CurrencyEnum.values();
     }
 
+    public void conversionRequest(CurrencyModel currency)
+    {
+        String base=currency.getBaseCurrency().toString();
+        String exchange=currency.getExchangeCurrency().toString();
+
+    }
+
 }

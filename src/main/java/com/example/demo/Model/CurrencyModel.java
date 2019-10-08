@@ -6,16 +6,16 @@ import javax.validation.constraints.*;
 public class CurrencyModel {
 
 
-    @NotNull
-    @DecimalMin("0.01")
+    @NotNull(message = "Cannot be null")
+//    @NotEmpty(message = "Cannot be empty")
+    @DecimalMin(value = "0.01",message = "Please select a value greater than 0.")
     @DecimalMax(value ="1000000.00",message = "Please select a value at or below 1 million.")
     private double money;
 
-    @NotNull
-    @NotEmpty(message = "Please select a currency.")
+    @NotNull(message = "Cannot be null")
     private CurrencyEnum baseCurrency;
-    @NotNull
-    @NotEmpty(message = "Please select a currency")
+
+    @NotNull(message="Cannot be null")
     private CurrencyEnum exchangeCurrency;
 
     public CurrencyModel()
