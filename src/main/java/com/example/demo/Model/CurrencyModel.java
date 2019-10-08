@@ -7,10 +7,10 @@ public class CurrencyModel {
 
 
     @NotNull(message = "Cannot be null")
-    @NotEmpty(message = "Cannot be empty")
-//    @DecimalMin(value = "0.01",message = "Please select a value greater than 0.")
-//    @DecimalMax(value ="1000000.00",message = "Please select a value at or below 1 million.")
-    private String money;
+//    @NotEmpty(message = "Cannot be empty")
+    @DecimalMin(value = "0.01",message = "Please select a value greater than 0.")
+    @DecimalMax(value ="1000000.00",message = "Please select a value at or below 1 million.")
+    private double money;
 
     @NotNull(message = "Cannot be null")
     private CurrencyEnum baseCurrency;
@@ -21,11 +21,11 @@ public class CurrencyModel {
     public CurrencyModel()
     {}
 
-    public String getMoney() {
+    public double getMoney() {
         return money;
     }
 
-    public void setMoney(String money) {
+    public void setMoney(double money) {
         this.money = money;
     }
 

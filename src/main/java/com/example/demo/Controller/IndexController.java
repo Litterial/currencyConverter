@@ -38,6 +38,7 @@ public class IndexController {
             model.addAttribute("currency",indexService.allCurrency());
             return "index";
         }
+        indexService.conversionRequest(currencyform);
         return "conversion";
     }
 }

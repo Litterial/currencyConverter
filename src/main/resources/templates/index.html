@@ -10,24 +10,18 @@
 <form th:object="${currency_model}" method="post">
 
     <span th:errors="*{money}"></span>
-    <input type="text" th:field="*{money}">
+    <input type="text" id="money" name="money" th:value="1">
 
     <span th:errors="*{baseCurrency}"></span>
     <select th:field="*{baseCurrency}">
         <!-- .name() returns the name of the enum. full name refers to the private variable for the value of the enum-->
-        <option th:each="abbr: ${currency}"  th:text="|${abbr.name()} - ${abbr.fullName}|" th:value="${abbr.name()}">
-
-        </option>
-
+        <option th:each="abbr: ${currency}"  th:text="|${abbr.name()} - ${abbr.fullName}|" th:value="${abbr.name()}"></option>
     </select>
 
     <span th:errors="*{exchangeCurrency}"></span>
     <select th:field="*{exchangeCurrency}">
         <!-- .name() returns the name of the enum. full name refers to the private variable for the value of the enum-->
-        <option th:each="abbr: ${currency}"  th:text="|${abbr.name()} - ${abbr.fullName}|" th:value="${abbr.name()}">
-
-        </option>
-
+        <option th:each="abbr: ${currency}"  th:text="|${abbr.name()} - ${abbr.fullName}|" th:value="${abbr.name()}"></option>
     </select>
         <button>Submit</button>
 </form>
