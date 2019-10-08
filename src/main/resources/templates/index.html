@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="eng" xmlns:th="http:wwww.thymeleaf.org/">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -7,24 +7,29 @@
 <body>
 <h1>Hello World</h1>
 
-<form>
-<input type="text">
-<select id="fromBase">
-    <!-- .name() returns the name of the enum. full name refers to the private variable for the value of the enum-->
-    <option th:each="abbr: ${currency}"  th:text="|${abbr.name()} - ${abbr.fullName}|" th:value="${abbr.name()}">
+<form th:object="${currency_model}" method="post">
 
-    </option>
+    <span th:errors="*{money}"></span>
+    <input type="text" th:field="*{money}">
 
-</select>
+    <span th:errors="*{baseCurrency}"></span>
+    <select th:field="*{baseCurrency}">
+        <!-- .name() returns the name of the enum. full name refers to the private variable for the value of the enum-->
+        <option th:each="abbr: ${currency}"  th:text="|${abbr.name()} - ${abbr.fullName}|" th:value="${abbr.name()}">
 
-<select id="toConversion">
-    <!-- .name() returns the name of the enum. full name refers to the private variable for the value of the enum-->
-    <option th:each="abbr: ${currency}"  th:text="|${abbr.name()} - ${abbr.fullName}|" th:value="${abbr.name()}">
+        </option>
 
-    </option>
+    </select>
 
-</select>
-    <button>Submit</button>
+    <span th:errors="*{exchangeCurrency}"></span>
+    <select th:field="*{exchangeCurrency}">
+        <!-- .name() returns the name of the enum. full name refers to the private variable for the value of the enum-->
+        <option th:each="abbr: ${currency}"  th:text="|${abbr.name()} - ${abbr.fullName}|" th:value="${abbr.name()}">
+
+        </option>
+
+    </select>
+        <button>Submit</button>
 </form>
 </body>
 </html>

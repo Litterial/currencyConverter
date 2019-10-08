@@ -57,5 +57,6 @@ public class IndexService {
     {
         return CurrencyEnum.values();
     }
+    
 
 }
