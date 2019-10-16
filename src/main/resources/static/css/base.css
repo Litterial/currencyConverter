@@ -1,3 +1,6 @@
+html{
+}
+
 .form-container
 {
     margin:4% 15%;
@@ -9,6 +12,32 @@
     {    width:100vw;
     }
 
+    body
+    {
+        background: #e5e5e5;
+    }
 
 
+
+}
+
+#submit-button
+{
+    position:relative;
+    top:30%;
+    background: yellow;
+    color: blue;
+    width: 100%;
+
+}
+
+.amount
+{
+    font-size: xx-large;
+}
+
+.details
+{
+    font-size: x-large;
+    text-align: center;
 }

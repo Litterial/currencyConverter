@@ -4,28 +4,52 @@
 </head>
 <body>
 
-<h1 th:text="|Conversion rate: ${conversion_rate}|"></h1>
-<h1 th:text="|Conversion amount: ${conversion_amount}|"></h1>
-<div th:object="${currency_model}">
-    <h1 th:text="${currency_model.money}"></h1>
-    <h1 th:text="${currency_model.baseCurrency}"></h1>
-    <h1 th:text="${currency_model.exchangeCurrency}"></h1>
-</div>
 
-<form th:object="${currency_model}" method="post">
-    <input type="text" name="money" id="money" th:value="${currency_model.money}">
-    <select th:field="${currency_model.baseCurrency}">
-    <option th:each="abbr:${currency}" th:text="${abbr.getFullName()}" th:value="${abbr.name()}" th:selected="${abbr.name()== currency_model.baseCurrency}">
+<form th:object="${currency_model}" method="post" class="form-container">
+    <div class="columns">
 
-    </option>
-    </select>
+        <div class="field column is-one-third-tablet">
+            <label class="label" for="money">Amount</label>
+            <div class="control">
+                <input class ="input is-medium" type="text" name="money" id="money" th:value="${currency_model.money}">
+            </div>
+        </div>
 
-    <select th:field="${currency_model.exchangeCurrency}">
-        <option th:each="abbr:${currency}" th:text="${abbr.getFullName()}" th:value="${abbr.name()}" th:selected="${abbr.name()== currency_model.exchangeCurrency}">
+        <div class="field column is-one-third-tablet">
+            <label class="label" th:for="baseCurrency">From</label>
+            <div class="control">
+                <div class="select is-medium">
+                    <select class="long" th:field="${currency_model.baseCurrency}">
+                        <option th:each="abbr:${currency}" th:text="${abbr.getFullName()}" th:value="${abbr.name()}" th:selected="${abbr.name()== currency_model.baseCurrency}"></option>
+                    </select>
+                </div>
+            </div>
+        </div>
 
-        </option>
-    </select>
-    <button>Submit</button>
+        <div class="field column is-one-third-tablet">
+            <label class="label" th:for="exchangeCurrency">To</label>
+            <div class="control">
+                <div class="select is-medium">
+                    <select class="long" th:field="${currency_model.exchangeCurrency}">
+                        <option th:each="abbr:${currency}" th:text="${abbr.getFullName()}" th:value="${abbr.name()}" th:selected="${abbr.name()== currency_model.exchangeCurrency}"></option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="column">
+            <button id="submit-button" class="button is-large"> > </button>
+        </div>
+    </div>
+
+    <div class="details">
+        <h1 class= "amount" th:text="|${currency_model.money} ${currency_model.baseCurrency.fullName} = ${conversion_amount} ${currency_model.exchangeCurrency.fullName}| "></h1>
+        <div>
+            <h1 th:text="| 1 ${currency_model.baseCurrency} = ${conversion_rate}|"></h1>
+            <h1 th:text="| 1 ${currency_model.exchangeCurrency} = ${inverse_conversion_rate}|"></h1>
+        </div>
+    </div>
+
 
 </form>
 

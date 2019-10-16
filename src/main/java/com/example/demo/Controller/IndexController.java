@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 @Controller
@@ -25,7 +26,7 @@ public class IndexController {
 //        indexService.testHTTP(" https://api.exchangeratesapi.io/latest?base=EUR");
 
         //calls function get get all the currencies
-        model.addAttribute("title","HomePage");
+        model.addAttribute("title","Currency Converter");
         model.addAttribute("currency_model",new CurrencyModel());
         model.addAttribute("currency",indexService.allCurrency());
         return "index";
@@ -36,8 +37,9 @@ public class IndexController {
 
         String conversion_rate="";
         String conversion_amount="";
+        String inverse_conversion_rate="";
 
-        model.addAttribute("title","Errors");
+        model.addAttribute("title","Currency Converter");
         model.addAttribute("currency_model",currencyform);
         model.addAttribute("currency",indexService.allCurrency());
         if (err.hasErrors())
@@ -46,18 +48,25 @@ public class IndexController {
  ;
             return "index";
         }
-        HashMap<String,String> dataMap =indexService.conversionRequest(currencyform);
+        ArrayList<HashMap> dataMap =indexService.conversionRequest(currencyform);
 
-        if (dataMap.get("success").equals("false")) {
-            model.addAttribute("errorMessage", dataMap.get("conversion_rate"));
-            return "index";
+        for (int i=0; i<2; i++)
+        {
+            if ((dataMap.get(i).get("success").toString()).equals("false")) {
+                model.addAttribute("errorMessage", dataMap.get(i).get("conversion_rate"));
+                return "index";
+            }
         }
-        conversion_rate=dataMap.get("conversion_rate");
-        conversion_amount=dataMap.get("conversion_amount");
 
-        model.addAttribute("title","result");
+        conversion_rate=dataMap.get(0).get("conversion_rate").toString();
+        conversion_amount=dataMap.get(1).get("conversion_amount").toString();
+        inverse_conversion_rate=dataMap.get(1).get("conversion_rate").toString();
+
+
+        model.addAttribute("title",String.valueOf(currencyform.getMoney())+ " " + currencyform.getBaseCurrency() + " to " +currencyform.getExchangeCurrency());
         model.addAttribute("conversion_rate",conversion_rate);
         model.addAttribute("conversion_amount",conversion_amount);
+        model.addAttribute("inverse_conversion_rate",inverse_conversion_rate);
         return "conversion";
     }
 }

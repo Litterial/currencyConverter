@@ -2,6 +2,7 @@ package com.example.demo.Service;
 
 import com.example.demo.Model.CurrencyEnum;
 import com.example.demo.Model.CurrencyModel;
+import javafx.util.Pair;
 import org.json.JSONObject;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -15,24 +16,40 @@ import java.util.*;
 @Service
 public class IndexService {
 
-    public HashMap<String,String> conversionRequest(CurrencyModel currency) {
+    public ArrayList<HashMap> conversionRequest(CurrencyModel currency) {
+        ArrayList<HashMap> hashMapArrayList = new ArrayList<>();
+
         String base = currency.getBaseCurrency().toString();
         String exchange = currency.getExchangeCurrency().toString();
+        Double money=currency.getMoney();
 
+        HashMap<String, String> baseMap;
+        HashMap<String, String> exchangeMap;
+
+        baseMap = apiConnection(base,exchange,money);
+        exchangeMap = apiConnection(exchange,base,money);
+
+        hashMapArrayList.add(baseMap);
+        hashMapArrayList.add(exchangeMap);
+
+        return hashMapArrayList;
+
+    }
+
+    private HashMap<String,String> apiConnection(String base, String exchange, double money) {
         String inputLine;   //inputLine will read each line
         StringBuffer content = new StringBuffer();    //StringBuffer is used to append lines
         HashMap<String,String> connectionMap;
 
         try {
-            URL url = new URL("https://api.exchangeratesapi.io/latest?base=" +base+"&symbols="+exchange);
+            URL url = new URL("https://api.exchangeratesapi.io/latest?base=" + base + "&symbols=" + exchange);
             BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));  // response from a url connection is an inputstream
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
             System.out.println("Printing Response Code");
             System.out.println(connection.getResponseCode());
 
-            //As long as current line is not blank, append the line
-            while ((inputLine = reader.readLine()) != null) { content.append(inputLine);}
+            while ((inputLine = reader.readLine()) != null) { content.append(inputLine); }//As long as current line is not blank, append the line
 
             reader.close();//close the reader
             connectionMap= parseJson(content.toString(),exchange);
@@ -41,11 +58,12 @@ public class IndexService {
                 return connectionMap;
             }
             Double d_conversion_rate=Double.parseDouble(connectionMap.get("conversion_rate"));
-            String conversionAmount=String.valueOf(currency.getMoney()*d_conversion_rate);
+            String conversionAmount=String.valueOf(money/d_conversion_rate);
             connectionMap.put("conversion_amount",conversionAmount);
             return connectionMap;
 
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             System.out.println("No connection");
 
             connectionMap=new HashMap<>();
@@ -55,6 +73,7 @@ public class IndexService {
             return connectionMap;
         }
     }
+
     private static HashMap<String,String> parseJson(String responseBody, String conversion_abbr) {
         JSONObject jsonObject = new JSONObject(responseBody);
         HashMap<String,String> jsonMap=new HashMap<>();
