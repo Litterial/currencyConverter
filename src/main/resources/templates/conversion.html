@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+<head th:replace="fragment"::header>
 </head>
 <body>
 
@@ -13,5 +11,24 @@
     <h1 th:text="${currency_model.baseCurrency}"></h1>
     <h1 th:text="${currency_model.exchangeCurrency}"></h1>
 </div>
+
+<form th:object="${currency_model}" method="post">
+    <input type="text" name="money" id="money" th:value="${currency_model.money}">
+    <select th:field="${currency_model.baseCurrency}">
+    <option th:each="abbr:${currency}" th:text="${abbr.getFullName()}" th:value="${abbr.name()}" th:selected="${abbr.name()== currency_model.baseCurrency}">
+
+    </option>
+    </select>
+
+    <select th:field="${currency_model.exchangeCurrency}">
+        <option th:each="abbr:${currency}" th:text="${abbr.getFullName()}" th:value="${abbr.name()}" th:selected="${abbr.name()== currency_model.exchangeCurrency}">
+
+        </option>
+    </select>
+    <button>Submit</button>
+
+</form>
+
+
 </body>
 </html>
