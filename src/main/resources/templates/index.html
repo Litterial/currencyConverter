@@ -3,7 +3,6 @@
 <head th:replace="fragment"::header>
 </head>
 <body>
-<h1>Hello World</h1>
 
 <form th:object="${currency_model}" method="post" class="form-container">
 
@@ -12,15 +11,15 @@
         <div class="field column is-one-third-tablet">
             <label class="label" for="money">Amount</label>
             <div class="control">
-                <input  class="input is-large" type="text" id="money" name="money" th:value="1">
+                <input  class="input is-medium" type="text" id="money" name="money" th:value="1">
             </div>
         </div>
     <span th:errors="*{baseCurrency}"></span>
         <div class="field column is-one-third-tablet">
             <label class="label" th:for="baseCurrency">From</label>
             <div class="control">
-                <div class="select is-large">
-                    <select th:field="*{baseCurrency}">
+                <div class="select is-medium ">
+                    <select class="long" th:field="*{baseCurrency}">
                     <!-- .name() returns the name of the enum. full name refers to the private variable for the value of the enum-->
                         <option th:each="abbr: ${currency}"  th:text="|${abbr.name()} - ${abbr.fullName}|" th:value="${abbr.name()}"></option>
                     </select>
@@ -33,8 +32,8 @@
     <div class="field column is-one-third-tablet">
         <label class="label" th:for="exchangeCurrency">To</label>
         <div class="control">
-            <div class="select is-large">
-                <select  th:field="*{exchangeCurrency}">
+            <div class="select is-medium">
+                <select class="long" th:field="*{exchangeCurrency}">
                     <!-- .name() returns the name of the enum. full name refers to the private variable for the value of the enum-->
                     <option th:each="abbr: ${currency}"  th:text="|${abbr.name()} - ${abbr.fullName}|" th:value="${abbr.name()}"></option>
                 </select>

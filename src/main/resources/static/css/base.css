@@ -1,4 +1,14 @@
 .form-container
 {
     margin:4% 15%;
+    text-overflow: ellipsis;
+}
+
+@media only screen and (max-width: 768px) {
+    .long
+    {    width:100vw;
+    }
+
+
+
 }
