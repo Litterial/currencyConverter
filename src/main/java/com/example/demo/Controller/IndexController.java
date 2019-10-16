@@ -26,7 +26,7 @@ public class IndexController {
 //        indexService.testHTTP(" https://api.exchangeratesapi.io/latest?base=EUR");
 
         //calls function get get all the currencies
-        model.addAttribute("title","HomePage");
+        model.addAttribute("title","Currency Converter");
         model.addAttribute("currency_model",new CurrencyModel());
         model.addAttribute("currency",indexService.allCurrency());
         return "index";
@@ -39,7 +39,7 @@ public class IndexController {
         String conversion_amount="";
         String inverse_conversion_rate="";
 
-        model.addAttribute("title","Errors");
+        model.addAttribute("title","Currency Converter");
         model.addAttribute("currency_model",currencyform);
         model.addAttribute("currency",indexService.allCurrency());
         if (err.hasErrors())
@@ -63,7 +63,7 @@ public class IndexController {
         inverse_conversion_rate=dataMap.get(1).get("conversion_rate").toString();
 
 
-        model.addAttribute("title","result");
+        model.addAttribute("title",String.valueOf(currencyform.getMoney())+ " " + currencyform.getBaseCurrency() + " to " +currencyform.getExchangeCurrency());
         model.addAttribute("conversion_rate",conversion_rate);
         model.addAttribute("conversion_amount",conversion_amount);
         model.addAttribute("inverse_conversion_rate",inverse_conversion_rate);
